@@ -16,7 +16,9 @@ from .serializers import AddCartItemSerializer, CartItemSerializer, CartSerializ
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    # Remove this line - we'll use get_queryset() instead
+    # queryset = Product.objects.all()
+
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
@@ -25,13 +27,21 @@ class ProductViewSet(ModelViewSet):
     search_fields = ['title', 'description']
     ordering_fields = ['unit_price', 'last_update']
 
+    def get_queryset(self):
+        # Optimize queries by prefetching images and selecting collection
+        return Product.objects.select_related('collection') \
+                              .prefetch_related('images') \
+                              .all()
+
     def get_serializer_context(self):
         return {'request': self.request}
 
     def destroy(self, request, *args, **kwargs):
         if OrderItem.objects.filter(product_id=kwargs['pk']).count() > 0:
-            return Response({'error': 'Product cannot be deleted because it is associated with an order item.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
+            return Response(
+                {'error': 'Product cannot be deleted because it is associated with an order item.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
         return super().destroy(request, *args, **kwargs)
 
 
@@ -145,7 +155,6 @@ class OrderViewSet(ModelViewSet):
 
 class ProductImageViewSet(ModelViewSet):
     serializer_class = ProductImageSerializer
-    queryset = ProductImage.objects.all()
 
     def get_serializer_context(self):
         return {
@@ -153,4 +162,4 @@ class ProductImageViewSet(ModelViewSet):
         }
 
     def get_queryset(self):
-        return ProductImage.objects.filter(product_id=self.kwargs['product_pk'])
+        return ProductImage.objects.select_related('product').filter(product_id=self.kwargs['product_pk'])
