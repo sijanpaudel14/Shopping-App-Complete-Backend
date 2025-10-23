@@ -21,6 +21,9 @@ celery = "*"
 flower = "*"
 
 [dev-packages]
+pytest = "*"
+autopep8 = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.13"
