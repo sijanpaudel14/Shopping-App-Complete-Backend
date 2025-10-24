@@ -15,7 +15,6 @@ class TestCreateCollection:
 
         # In Arrange part, we setup the test client without authentication
         client = APIClient()
-        
 
         # In Act part, we make a POST request to create a collection
         # For Act part:
@@ -30,14 +29,36 @@ class TestCreateCollection:
         # For Assert part:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-
     def test_if_user_is_not_admin_returns_403(self):
         client = APIClient()
-        # force_authenticate method is used to simulate an authenticated user who is not an admin   
+        # force_authenticate method is used to simulate an authenticated user who is not an admin
         client.force_authenticate(user={})
 
-        response = client.post('/store/collections/',{
-            'title':'a'
+        response = client.post('/store/collections/', {
+            'title': 'a'
         })
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
+    def test_if_data_is_invalid_returns_400(self):
+        client = APIClient()
+        # force_authenticate method is used to simulate an authenticated user who is not an admin
+        client.force_authenticate(user=User(is_staff=True))
+
+        response = client.post('/store/collections/', {
+            'title': ''  # Invalid data: title is required to be non-empty
+        })
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data['title'] is not None
+
+
+    # Enhanced test case to check for valid data
+    def test_if_data_is_valid_returns_201(self):
+        client = APIClient()
+        # force_authenticate method is used to simulate an authenticated user who is not an admin
+        client.force_authenticate(user=User(is_staff=True))
+
+        response = client.post('/store/collections/', {
+            'title': 'Valid Collection Title'
+        })
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data['id'] > 0
