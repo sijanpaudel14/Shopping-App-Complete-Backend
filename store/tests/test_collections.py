@@ -5,7 +5,8 @@ import pytest
 
 @pytest.mark.django_db
 class TestCreateCollection:
-    @pytest.mark.skip(reason="Permission classes temporarily disabled in CollectionViewSet") # Used to skip the test due to disabled permission classes
+    # Used to skip the test due to disabled permission classes
+    # @pytest.mark.skip(reason="Permission classes temporarily disabled in CollectionViewSet")
     def test_if_user_is_anonymous_returns_401(self):
         # Test that an anonymous user cannot create a collection
         # AAA, (Arrange, Act, Assert)
