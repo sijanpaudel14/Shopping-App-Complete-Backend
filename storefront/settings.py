@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'djoser',
+    'silk',
     'playground',
     'debug_toolbar',
     'store',
@@ -70,6 +71,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE += ['silk.middleware.SilkyMiddleware',]
 
 INTERNAL_IPS = [
     # ...
@@ -158,7 +162,7 @@ STATIC_URL = '/static/'
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -199,10 +203,10 @@ ADMINS = [
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
 
 CELERY_BEAT_SCHEDULE = {
-    'notify_customers':{
-        'task':'playground.tasks.notify_customers',
-        'schedule':5, # 5 seconds
-        'args':['Hello World'],
+    'notify_customers': {
+        'task': 'playground.tasks.notify_customers',
+        'schedule': 5,  # 5 seconds
+        'args': ['Hello World'],
         # 'schedule':crontab(day_of_week=1, hour=7, minute=30)
         # for every  15 mintues, crontab(minute='*/15')
     }
