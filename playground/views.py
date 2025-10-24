@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.core.cache import cache
 from django.core.mail import EmailMessage, BadHeaderError
+from django.utils.decorators import method_decorator
 from .tasks import notify_customers
-
+from django.views.decorators.cache import cache_page
 import requests
+from rest_framework.views import APIView
 # To prevent from interception, we use BadHeaderError while sending email so that no one can inject headers in the email.
 
 from templated_mail.mail import BaseEmailMessage
@@ -34,11 +36,35 @@ from templated_mail.mail import BaseEmailMessage
 #     notify_customers.delay('Hello')
 #     return render(request, 'hello.html', {'name': 'Sijjan'})
 
-def say_hello(request):
-    key = 'httpbin_response'
-    if cache.get(key) is None:
-        print("Making external API call")
+# def say_hello(request):
+#     key = 'httpbin_response'
+#     if cache.get(key) is None:
+#         print("Making external API call")
+#         response = requests.get('https://httpbin.org/delay/2')
+#         data = response.json()
+#         cache.set(key, data)  # Cache for 30 seconds
+#     return render(request, 'hello.html', {'name': 'Sijan', 'data': cache.get(key)})
+
+# @cache_page(30)  # Cache the entire view for 30 seconds
+# def say_hello(request):
+#     response = requests.get('https://httpbin.org/delay/2')
+#     data = response.json()
+#     return render(request, 'hello.html', {'name': 'Sijan', 'data': data})
+
+# If any changes is made in the view, the cache will be invalidated automatically. so, our changes will be reflected only after TIMEOUT of cache.
+
+# To manually clear the cache, you can use:
+# from django.core.cache import cache
+# cache.clear()
+
+# To clear specific cache key, you can use:
+# cache.delete('httpbin_response')
+
+# For class, cache_page doesn't work directly. We need to use method_decorator to apply it to dispatch method of the class-based view.
+
+class HelloView(APIView):
+    @method_decorator(cache_page(5 * 60))  # Cache the view for 5 minutes
+    def get(self, request):
         response = requests.get('https://httpbin.org/delay/2')
         data = response.json()
-        cache.set(key, data)  # Cache for 30 seconds
-    return render(request, 'hello.html', {'name': 'Sijan', 'data': cache.get(key)})
+        return render(request, 'hello.html', {'name': 'Sijan', 'data': data})
