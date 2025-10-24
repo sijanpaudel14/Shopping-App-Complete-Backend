@@ -1,5 +1,135 @@
 {
   "python.testing.pytestArgs": ["."],
   "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true
+  "python.testing.pytestEnabled": true,
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          "string.quoted.single.python",
+          "punctuation.definition.string.begin.python",
+          "punctuation.definition.string.end.python"
+        ],
+        "settings": {
+          "foreground": "#e8e046"
+        }
+      },
+      {
+        "scope": "storage.type.class.python",
+        "settings": {
+          "foreground": "#00D9FF",
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": [
+          "variable.parameter.function.python",
+          "variable.parameter.function.python punctuation.separator"
+        ],
+        "settings": {
+          "foreground": "#FF9E80"
+        }
+      },
+      {
+        "scope": "entity.name.function.python",
+        "settings": {
+          "foreground": "#00E5FF"
+        }
+      },
+      {
+        "scope": "variable.language.special.self.python",
+        "settings": {
+          "foreground": "#E8E8E8",
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": "keyword.control.flow.python",
+        "settings": {
+          "foreground": "#8C9EFF"
+        }
+      },
+      {
+        "scope": "keyword.operator.logical.python",
+        "settings": {
+          "foreground": "#7C4DFF"
+        }
+      },
+      {
+        "scope": "constant.numeric.integer.python",
+        "settings": {
+          "foreground": "#FFAB40"
+        }
+      },
+      {
+        "scope": "comment.line.number-sign.python",
+        "settings": {
+          "foreground": "#78909C",
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": "variable.other.readwrite.instance.python",
+        "settings": {
+          "foreground": "#E8E8E8"
+        }
+      },
+      {
+        "scope": "variable.other.readwrite.global.python",
+        "settings": {
+          "foreground": "#E8E8E8"
+        }
+      },
+      {
+        "scope": "variable.other.readwrite.local.python",
+        "settings": {
+          "foreground": "#E8E8E8"
+        }
+      },
+      {
+        "scope": "storage.type.function.python",
+        "settings": {
+          "foreground": "#00D9FF"
+        }
+      },
+      {
+        "scope": "entity.name.type.class.python",
+        "settings": {
+          "foreground": "#5ab36a"
+        }
+      },
+      {
+        "scope": [
+          "hidecomments",
+          "comment",
+          "comment.block",
+          "comment.line",
+          "comment.line.double-slash",
+          "variable.other.jsdoc",
+          "storage.type.class.jsdoc",
+          "punctuation.definition.block.tag.jsdoc",
+          "punctuation.definition.bracket.curly.begin.jsdoc",
+          "punctuation.definition.bracket.curly.end.jsdoc",
+          "entity.name.type.instance.jsdoc",
+          "comment.block.documentation.ts",
+          "comment.block.documentation.js",
+          "comment.block.documentation.cs",
+          "comment.block.documentation.cs entity.other.attribute-name.localname.cs",
+          "comment.block.documentation.cs entity.other.attribute-name.cs",
+          "comment.block.documentation.cs punctuation.definition.tag.cs",
+          "comment.block.documentation.cs punctuation.definition.string.begin.cs",
+          "comment.block.documentation.cs punctuation.definition.string.end.cs",
+          "comment.block.documentation.cs punctuation.definition.bracket.curly.begin.cs",
+          "comment.block.documentation.cs punctuation.definition.bracket.curly.end.cs",
+          "comment.block.documentation.cs punctuation.definition.block.tag.cs",
+          "comment.block.documentation.cs string.quoted.double.cs",
+          "comment.block.documentation.cs entity.name.tag.localname.cs"
+        ],
+        "settings": {
+          "foreground": "#00000000"
+        }
+      }
+    ],
+    "comments": "#00000000"
+  }
 }
