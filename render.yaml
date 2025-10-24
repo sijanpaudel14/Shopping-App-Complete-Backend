@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sijanbuy
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn storefront.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: storefront.settings.prod
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: PYTHON_VERSION
+        value: 3.10.18
+
+databases:
+  - name: sijanbuy-db
+    databaseName: storefront
+    user: storefront
