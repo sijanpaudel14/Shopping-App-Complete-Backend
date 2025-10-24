@@ -11,6 +11,23 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # Step 1: Add a temporary UUID field
+        migrations.AddField(
+            model_name='cart',
+            name='uuid_id',
+            field=models.UUIDField(default=uuid.uuid4, null=True),
+        ),
+        # Step 2: Remove the old primary key
+        migrations.RemoveField(
+            model_name='cart',
+            name='id',
+        ),
+        # Step 3: Rename uuid_id to id and make it primary key
+        migrations.RenameField(
+            model_name='cart',
+            old_name='uuid_id',
+            new_name='id',
+        ),
         migrations.AlterField(
             model_name='cart',
             name='id',
