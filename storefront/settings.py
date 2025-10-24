@@ -229,6 +229,10 @@ CACHES = {
     }
 }
 
+# Create logs directory if it doesn't exist
+LOGS_DIR = BASE_DIR / 'logs'
+LOGS_DIR.mkdir(exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -238,8 +242,10 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/static_files.log'),
-        }},
+            'filename': LOGS_DIR / 'static_files.log',
+            'formatter': 'verbose',
+        }
+    },
     'loggers': {
         '': {
             'handlers': ['console', 'file'],
@@ -248,8 +254,8 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '{asctime} {levelname} -- {module} --- {message}',
-            'style': '{',  # str.format() style
+            'format': '{asctime} ({levelname}) -- {name} --- {message}',
+            'style': '{',
         }
     }
 }
