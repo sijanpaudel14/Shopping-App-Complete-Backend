@@ -49,7 +49,7 @@ kombu
 MarkupSafe
 model-bakery
 msgpack
-mysqlclient
+# mysqlclient
 oauthlib
 packaging
 pillow
@@ -94,3 +94,4 @@ wsproto
 zope.event
 zope.interface
 dj-database-url
+psycopg2-binary
