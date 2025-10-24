@@ -1,6 +1,7 @@
 from rest_framework import status
 import pytest
-
+from store.models import Collection, Product
+from model_bakery import baker
 
 @pytest.fixture
 def create_collection(api_client):
@@ -57,3 +58,25 @@ class TestCreateCollection:
         })
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['id'] > 0
+
+@pytest.mark.django_db
+class TestRetrieveCollection:
+    def test_if_collection_exists_returns_200(self,api_client):
+        # Arrange
+        collection = baker.make(Collection)
+        # The below code is useful to place all products under the same created collection
+        # baker.make(Product, collection=collection, _quantity=3)
+        # print(collection.__dict__)
+
+        # Act
+        response = api_client.get(f'/store/collections/{collection.id}/')
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {
+            'id': collection.id,
+            'title': collection.title,
+            'products_count': 0  # Assuming no products are associated with the collection
+        }
+
+        
