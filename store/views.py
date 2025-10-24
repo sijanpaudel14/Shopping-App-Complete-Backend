@@ -17,7 +17,7 @@ from .serializers import AddCartItemSerializer, CartItemSerializer, CartSerializ
 
 class ProductViewSet(ModelViewSet):
     # Remove this line - we'll use get_queryset() instead
-    # queryset = Product.objects.all()
+    queryset = Product.objects.all()
 
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -27,11 +27,11 @@ class ProductViewSet(ModelViewSet):
     search_fields = ['title', 'description']
     ordering_fields = ['unit_price', 'last_update']
 
-    def get_queryset(self):
-        # Optimize queries by prefetching images and selecting collection
-        return Product.objects.select_related('collection') \
-                              .prefetch_related('images') \
-                              .all()
+    # def get_queryset(self):
+    #     # Optimize queries by prefetching images and selecting collection
+    #     return Product.objects.select_related('collection') \
+    #                           .prefetch_related('images') \
+    #                           .all()
 
     def get_serializer_context(self):
         return {'request': self.request}

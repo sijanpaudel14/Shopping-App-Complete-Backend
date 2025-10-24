@@ -1,29 +1,41 @@
-# Browse Products
-from locust import HttpUser, task, between
-from random import randint
+from locust import HttpUser, task, between, events
+from random import choice
 
-# Define a user behavior for browsing products
+
+# Global lists to store actual IDs
+PRODUCT_IDS = []
+COLLECTION_IDS = []
+
+
+@events.test_start.add_listener
+def on_test_start(environment, **kwargs):
+    """Fetch actual IDs before test starts"""
+    from store.models import Product, Collection
+
+    global PRODUCT_IDS, COLLECTION_IDS
+    PRODUCT_IDS = list(Product.objects.values_list('id', flat=True)[:100])
+    COLLECTION_IDS = list(Collection.objects.values_list('id', flat=True))
+
+    print(
+        f"Loaded {len(PRODUCT_IDS)} product IDs and {len(COLLECTION_IDS)} collection IDs")
 
 
 class WebsiteUser(HttpUser):
-    wait_time = between(1, 5)  # Simulate user wait time between tasks
+    wait_time = between(1, 5)
 
     @task(2)
     def view_products(self):
         print("===============Viewing Products=================")
-        # Simulate browsing a product with a random ID
-        collection_id = randint(2, 6)
+        collection_id = choice(COLLECTION_IDS)
         self.client.get(
             f"/store/products/?collection_id={collection_id}",
             name="/store/products/"
         )
-# Note: In a real-world scenario, you would want to ensure that the collection IDs
-# being accessed actually exist in the database. This is a simplified example.
 
     @task(4)
     def view_product_details(self):
         print("===============Viewing Product Details=================")
-        product_id = randint(1, 10)
+        product_id = choice(PRODUCT_IDS)
         self.client.get(
             f"/store/products/{product_id}/",
             name="/store/products/[id]/"
@@ -32,7 +44,7 @@ class WebsiteUser(HttpUser):
     @task(1)
     def add_to_cart(self):
         print("===============Adding Product to Cart=================")
-        product_id = randint(1, 10)
+        product_id = choice(PRODUCT_IDS)
         self.client.post(
             f"/store/carts/{self.cart_id}/items/",
             name="/store/carts/items/",
@@ -41,7 +53,5 @@ class WebsiteUser(HttpUser):
 
     def on_start(self):
         print("===============Creating Cart=================")
-        # This method is called when a simulated user starts
-        # Create a new cart for the user
         response = self.client.post("/store/carts/")
-        self.cart_id = response.json().get("id")  # Store the cart ID for future use
+        self.cart_id = response.json().get("id")
