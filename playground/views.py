@@ -74,7 +74,7 @@ class HelloView(APIView):
         try:
             logger.info("Fetching data from external API")
             response = requests.get('https://httpbin.org/delay/1')
-            logger.info("Received response from external API")
+            logger.info("Received response from external AP!!!I")
             data = response.json()
         except Exception as e:
             logger.critical(f"Error fetching data from external API: {e}")
