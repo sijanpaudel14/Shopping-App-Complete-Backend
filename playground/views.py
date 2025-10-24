@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.core.cache import cache
 from django.core.mail import EmailMessage, BadHeaderError
 from .tasks import notify_customers
+
+import requests
 # To prevent from interception, we use BadHeaderError while sending email so that no one can inject headers in the email.
 
 from templated_mail.mail import BaseEmailMessage
@@ -27,6 +30,15 @@ from templated_mail.mail import BaseEmailMessage
 # message.send(['hello@buy.com'])
 # except BadHeaderError:
 #     pass
+# def say_hello(request):
+#     notify_customers.delay('Hello')
+#     return render(request, 'hello.html', {'name': 'Sijjan'})
+
 def say_hello(request):
-    notify_customers.delay('Hello')
-    return render(request, 'hello.html', {'name': 'Mosh'})
+    key = 'httpbin_response'
+    if cache.get(key) is None:
+        print("Making external API call")
+        response = requests.get('https://httpbin.org/delay/2')
+        data = response.json()
+        cache.set(key, data)  # Cache for 30 seconds
+    return render(request, 'hello.html', {'name': 'Sijan', 'data': cache.get(key)})
