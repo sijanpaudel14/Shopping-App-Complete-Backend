@@ -1,6 +1,7 @@
 amqp
 asgiref
 autopep8
+allauth
 bidict
 billiard
 blinker
