@@ -1,7 +1,7 @@
 amqp
 asgiref
 autopep8
-allauth
+django-allauth  
 bidict
 billiard
 blinker
