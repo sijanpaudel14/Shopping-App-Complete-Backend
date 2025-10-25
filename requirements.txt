@@ -26,6 +26,7 @@ django-silk
 django-templated-mail
 djangorestframework
 djangorestframework_simplejwt
+dj_rest_auth
 djoser
 docopt
 dotenv
