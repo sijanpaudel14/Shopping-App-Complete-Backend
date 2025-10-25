@@ -5,8 +5,12 @@ import dj_database_url
 
 DEBUG = False
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", "sijanbuy-prod.azurewebsites.net").split(",")
+ALLOWED_HOSTS = [
+    'buywithsijan.vercel.app',
+    'sijanbuy.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 # Azure SQL Database configuration
 # DATABASES = {
