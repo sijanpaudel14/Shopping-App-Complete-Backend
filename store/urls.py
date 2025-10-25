@@ -5,7 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('products', views.ProductViewSet, basename='products')
-router.register('collections', views.CollectionViewSet,basename='collections')
+router.register('collections', views.CollectionViewSet, basename='collections')
 router.register('carts', views.CartViewSet, basename='carts')
 router.register('customers', views.CustomerViewSet, basename='customers')
 router.register('orders', views.OrderViewSet, basename='orders')
@@ -23,3 +23,10 @@ carts_router.register('items', views.CartItemViewSet, basename='cart-items')
 
 # URLConf
 urlpatterns = router.urls + products_router.urls + carts_router.urls
+urlpatterns += [
+    # Auth endpoints
+    path('auth/', include('dj_rest_auth.urls')),
+    path('auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('auth/google/', views.google_login, name='google_login'),
+    path('auth/github/', views.github_login, name='github_login'),
+]

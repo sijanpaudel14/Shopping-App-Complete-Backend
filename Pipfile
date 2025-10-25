@@ -22,6 +22,8 @@ flower = "*"
 django-redis = "*"
 whitenoise = "*"
 gunicorn = "*"
+dj-rest-auth = "*"
+django-allauth = "*"
 
 [dev-packages]
 pytest = "*"
